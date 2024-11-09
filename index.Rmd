@@ -1,0 +1,31 @@
+---
+title: "Index"
+author: "Irene"
+date: "2024-11-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+```
+
+## Project Description
+This project involves the visualisation of Sheffield's weather data. 
+
+The data is retrieved from: https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/sheffielddata.txt
+
+```{r}
+
+```
+
+
+## Import the Data
+
+
+## Wrangle the Data
+
+
+## Visualise the Data
