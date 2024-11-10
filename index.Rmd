@@ -17,15 +17,76 @@ This project involves the visualisation of Sheffield's weather data.
 
 The data is retrieved from: https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/sheffielddata.txt
 
-```{r}
+The URL for these pages is:https:
+//ijames8.github.io/sheffield_weather_data
 
-```
+The repository for these pages is: 
+https://github.com/IJames8/sheffield_weather_data.git
+
 
 
 ## Import the Data
 
+```{r import}
+loc = "https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/sheffielddata.txt"
+
+# split values by 'tabs' with \t. Tell R to not split the values by commas, but to split it up by tab.
+
+# this approach does not work. 
+
+# df <- read.csv(loc, sep = "\t", skip = 7)
+
+# import as text, instead of csv, and clean.
+
+dat <- readLines(loc)
+
+# change the word "provisional" to nothing, replace every instance. 
+dat <- gsub("Provisional", "", dat)
+dat <- gsub("\\*", "", dat)
+dat <- gsub("\\#", "", dat)
+
+# save new file
+writeLines(dat,"cleaned.txt" )
+
+# import data file
+
+df <- read.table("cleaned.txt", skip = 7, fill = TRUE)
+
+```
+
 
 ## Wrangle the Data
+```{r wrangle}
+cols <- c("year", "month", "max_t", "min_t", "af", "rain", "sun")
+
+colnames(df) <- cols
+
+```
+
 
 
 ## Visualise the Data
+
+```{r plot}
+
+# I need max temperature to be a number not character. 
+
+df$max_t <- as.numeric(df$max_t)
+
+# create plot, change transparency with alpha. 
+# canvas
+
+p <- ggplot(df, aes( x = month, y = max_t, group = year, colour = year))
+
+p + geom_line(alpha = 0.1) +
+  geom_line(data = df %>% filter(year ==2024), colour = "red", linewidth = 2)
+
+
+
+
+```
+
+
+
+
+
