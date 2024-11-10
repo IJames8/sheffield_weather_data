@@ -6,10 +6,14 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 
 library(tidyverse)
 library(here)
+install.packages('gganimate')
+library(gganimate)
+install.packages("gifski")
+
 ```
 
 ## Project Description
@@ -46,11 +50,11 @@ dat <- gsub("\\*", "", dat)
 dat <- gsub("\\#", "", dat)
 
 # save new file
-writeLines(dat,"cleaned.txt" )
+writeLines(dat,here("data", "cleaned.txt" ))
 
 # import data file
 
-df <- read.table("cleaned.txt", skip = 7, fill = TRUE)
+df <- read.table("data/cleaned.txt", skip = 7, fill = TRUE)
 
 ```
 
@@ -83,9 +87,33 @@ p + geom_line(alpha = 0.1) +
 
 
 
-
 ```
 
+
+##Animated plot
+
+We are going to use gganimate to create an animated plot. Consider if the animation is actually going to be helpful to the data visualisation. 
+
+```{r animate}
+# create an average temp for each year
+
+df2 <- df %>%
+  group_by(year) %>%
+  summarise(avg_t = mean(max_t))
+
+# create an animated plot
+
+p2 <- ggplot(df2, aes( x = year, y = avg_t), frame = year)
+
+# Cumulative keeps it on the screen
+anim <- p2 + geom_point() +
+  transition_manual(year, cumlulative = TRUE)
+
+anim
+
+# don't think I downloaded gganimate properly. 
+  
+```
 
 
 
